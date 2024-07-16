@@ -7,13 +7,13 @@ import { basicSetup } from "codemirror";
 import { linter } from "@codemirror/lint";
 import { Annotation, EditorState, Extension } from "@codemirror/state";
 import { EditorView, ViewUpdate, placeholder } from "@codemirror/view";
-import { autocompletion } from "@codemirror/autocomplete";
+import { autocompletion, completeFromList } from "@codemirror/autocomplete";
 
 // CodeMirror Language Support
 import { html } from "@codemirror/lang-html";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { javascript, javascriptLanguage } from "@codemirror/lang-javascript";
-
+import { mvel, mvelLanguage } from '../code-lang/index'
 // CodeMirror Linters
 import jsLinter from "./linters/jsLinter";
 
@@ -22,6 +22,7 @@ import JSAutoSuggestions from "./suggestions/jsAutoSuggestion";
 
 // Editor Theme
 import { themeLightInit } from "./theme";
+import { completeJava } from "../components/autocomplete/autocomplete-java";
 
 const External = Annotation.define<boolean>();
 
@@ -38,12 +39,15 @@ const autoComplete = {
   javascript: javascriptLanguage.data.of({
     autocomplete: JSAutoSuggestions,
   }),
+  mvel: mvelLanguage.data.of({
+  }),
 };
 
 const languageFormatting = {
   json: json(),
   html: html(),
   javascript: javascript(),
+  mvel: mvel(),
 } as const;
 
 const baseExtensions = [
@@ -82,6 +86,7 @@ const Editor: React.FC<EditorProps> = ({
   fontSize = "11pt",
   placeholder: placeHolderStr = "",
 }) => {
+
   const editorRef = useRef<HTMLElement>(null);
   const [extensions, setExtensions] = useState<Extension[]>(baseExtensions);
 
@@ -149,6 +154,32 @@ const Editor: React.FC<EditorProps> = ({
     },
   });
 
+  const javaCompletion = autocompletion({
+    activateOnTyping: true,
+    override: [
+      async (ctx) => {
+        const { pos } = ctx;
+        try {
+          const subText = value.substring(0, pos);
+          const parts = subText.split('\n');
+          const line = parts.length;
+          const column = parts[parts.length - 1].length;
+          const currentCursor = {line, column };
+          const completions = completeJava(value, currentCursor);
+          if (!completions || completions.length === 0) {
+            console.log('Unable to get completions', { pos });
+            return null;
+          }
+          return completeFromList(completions)(ctx);
+        } catch (e) {
+          console.log('Unable to get completions', { pos, error: e });
+          return null;
+        }
+      },
+    ],
+  });
+
+
   const updateListener = EditorView.updateListener.of((vu: ViewUpdate) => {
     if (
       vu.docChanged &&
@@ -184,8 +215,9 @@ const Editor: React.FC<EditorProps> = ({
           useThemeOptions,
           updateListener,
           placeholder(placeHolderStr),
+          language === 'mvel' ? javaCompletion : void 0,
           ...extensions,
-        ],
+        ].filter(Boolean) as Extension[],
       }),
       parent: editorRef.current,
     });

@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   const [value, setValue] = useState("");
-  const [lang, setLang] = useState<languageType>("javascript");
+  const [lang, setLang] = useState<languageType>("mvel");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLangChange = (event: any) => {
@@ -30,6 +30,7 @@ function App() {
         <MenuItem value={'json'}>JSON</MenuItem>
         <MenuItem value={'html'}>HTML</MenuItem>
         <MenuItem value={'javascript'}>Javascript</MenuItem>
+        <MenuItem value={'mvel'}>MVEL</MenuItem>
       </Select>
       <Editor
         language={lang}
