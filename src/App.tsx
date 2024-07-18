@@ -6,7 +6,32 @@ import Editor, { languageType } from "./codeEditor";
 import "./App.css";
 
 function App() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(`
+/** 
+ * 测试注释区域
+ */
+@DEFINE_BEGIN hwm 
+// 表达式
+if (last != null && last.accuHWM != null) {
+  return last.accuHWM;
+}
+return shareDetail.orgAccuNav;
+@END
+@DEFINE_BEGIN acc
+  return tradeConfirm.accuNav;
+@END
+// 业绩报酬
+// 表达式
+def addTwo(a, b) {
+  return a + b;
+}
+addTwo(5, 2);
+if (accu <= accuHWM) { // 小于高水位，不计提
+   return 0;
+} else {
+   return util.round((accuHWM - accu) * rate, 2);
+}
+  `);
   const [lang, setLang] = useState<languageType>("mvel");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

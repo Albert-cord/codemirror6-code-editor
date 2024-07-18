@@ -20,12 +20,16 @@ export const themeLightInit = (options?: Partial<CreateThemeOptions>) => {
     },
     styles: [
       { tag: [t.standard(t.tagName), t.tagName], color: "#116329" },
-      { tag: [t.comment, t.bracket], color: "#6a737d" },
+      { tag: [t.comment, t.bracket], color: "#6a737d", backgroundColor: '#116329', class: 'comment-block' },
       { tag: [t.className, t.propertyName], color: "#6f42c1" },
       {
         tag: [t.variableName, t.attributeName, t.number, t.operator],
         color: "#005cc5",
       },
+      // 中间状态另外传值过来，疑似codemirror bug
+      { tag: [t.float], color: '#005c22',},
+      { tag: [t.number], color: '#005c11',},
+      { tag: [t.variableName], color: '#005c33',},
       {
         tag: [t.keyword, t.typeName, t.typeOperator, t.typeName],
         color: "#d73a49",
@@ -40,6 +44,7 @@ export const themeLightInit = (options?: Partial<CreateThemeOptions>) => {
       { tag: t.link, textDecoration: "underline" },
       { tag: t.strikethrough, textDecoration: "line-through" },
       { tag: t.invalid, color: "#cb2431" },
+      { tag: [t.special(t.float)], color: "#FCC06C" },
       ...styles,
     ],
   });

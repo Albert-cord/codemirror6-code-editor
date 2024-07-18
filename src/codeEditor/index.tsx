@@ -215,7 +215,6 @@ const Editor: React.FC<EditorProps> = ({
           useThemeOptions,
           updateListener,
           placeholder(placeHolderStr),
-          language === 'mvel' ? javaCompletion : void 0,
           ...extensions,
         ].filter(Boolean) as Extension[],
       }),
