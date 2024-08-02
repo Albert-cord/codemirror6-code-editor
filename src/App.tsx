@@ -4,6 +4,7 @@ import { MenuItem, Select, Stack } from "@mui/material";
 import Editor, { languageType } from "./codeEditor";
 
 import "./App.css";
+import { FullRichTextArea } from "./fullrich-textarea";
 
 function App() {
   const [value, setValue] = useState(`
@@ -56,15 +57,19 @@ if (accu <= accuHWM) { // 小于高水位，不计提
         <MenuItem value={'html'}>HTML</MenuItem>
         <MenuItem value={'javascript'}>Javascript</MenuItem>
         <MenuItem value={'mvel'}>MVEL</MenuItem>
+        <MenuItem value={'FullRichTextArea'}>FullRichTextArea</MenuItem>
       </Select>
-      <Editor
+      {lang !== 'FullRichTextArea' && <Editor
         language={lang}
         value={value}
         onChange={(val) => setValue(val)}
         height="65vh"
         width="80vw"
         key={lang}
-      />
+      />}
+      {
+       lang === 'FullRichTextArea' &&  <FullRichTextArea />
+      }
     </Stack>
   );
 }

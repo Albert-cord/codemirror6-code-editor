@@ -21,6 +21,7 @@
     "@codemirror/view": "^6.23.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@floating-ui/react": "^0.26.20",
     "@mui/material": "^5.15.12",
     "@uiw/codemirror-themes": "^4.21.21",
     "antlr4-c3": "^2.2.1",
